@@ -64,7 +64,7 @@ CComPtr<IVirtualDesktop> GetCurrentDesktop(LogF* pLog, void* logdata)
 {
     CComPtr<IVirtualDesktop> pCurrentDesktop;
     const CComPtr<IVirtualDesktopManagerInternal>& pDesktopManagerInternal = GetDesktopManagerInternal(pLog, logdata);
-    LogHR(pLog, logdata, pDesktopManagerInternal->GetCurrentDesktop(&pCurrentDesktop), L"GetCurrentDesktop");
+    LogHR(pLog, logdata, pDesktopManagerInternal->GetCurrentDesktop(nullptr, &pCurrentDesktop), L"GetCurrentDesktop");
     return pCurrentDesktop;
 }
 
@@ -83,14 +83,14 @@ static CComPtr<IVirtualDesktop> GetAdjacentDesktop(LogF* pLog, void* logdata, Ad
 void SwitchDesktop(LogF* pLog, void* logdata, const CComPtr<IVirtualDesktop>& pDesktop)
 {
     const CComPtr<IVirtualDesktopManagerInternal>& pDesktopManagerInternal = GetDesktopManagerInternal(pLog, logdata);
-    LogHR(pLog, logdata, pDesktopManagerInternal->SwitchDesktop(pDesktop), L"SwitchDesktop");
+    LogHR(pLog, logdata, pDesktopManagerInternal->SwitchDesktop(nullptr, pDesktop), L"SwitchDesktop");
 }
 
 int GetDesktopCount(LogF* pLog, void* logdata)
 {
     const CComPtr<IVirtualDesktopManagerInternal>& pDesktopManagerInternal = GetDesktopManagerInternal(pLog, logdata);
     CComPtr<IObjectArray> pDesktopArray;
-    if (pDesktopManagerInternal && SUCCEEDED(pDesktopManagerInternal->GetDesktops(&pDesktopArray)))
+    if (pDesktopManagerInternal && SUCCEEDED(pDesktopManagerInternal->GetDesktops(nullptr, &pDesktopArray)))
     {
         UINT count;
         if (!LogHR(pLog, logdata, pDesktopArray->GetCount(&count), L"GetDesktopCount"))
@@ -105,7 +105,7 @@ int GetDesktopNumber(LogF* pLog, void* logdata, const CComPtr<IVirtualDesktop>& 
     int dn = 0;
     const CComPtr<IVirtualDesktopManagerInternal>& pDesktopManagerInternal = GetDesktopManagerInternal(pLog, logdata);
     CComPtr<IObjectArray> pDesktopArray;
-    if (pDesktopManagerInternal && SUCCEEDED(pDesktopManagerInternal->GetDesktops(&pDesktopArray)))
+    if (pDesktopManagerInternal && SUCCEEDED(pDesktopManagerInternal->GetDesktops(nullptr, &pDesktopArray)))
     {
         for (CComPtr<IVirtualDesktop> pDesktop : ObjectArrayRange<IVirtualDesktop>(pDesktopArray))
         {
@@ -123,11 +123,11 @@ std::wstring GetDesktopName(LogF* pLog, void* logdata, const CComPtr<IVirtualDes
 {
     std::wstring ret;
 
-    CComPtr<IVirtualDesktop2> pDesktop2;
-    if (SUCCEEDED(pDesktop.QueryInterface(&pDesktop2)))
-    {
+   // CComPtr<IVirtualDesktop2> pDesktop2;
+   // if (SUCCEEDED(pDesktop.QueryInterface(&pDesktop2)))
+  //  {
         HSTRING s = NULL;
-        LogHR(pLog, logdata, pDesktop2->GetName(&s), L"GetDesktopName");
+        //LogHR(pLog, logdata, pDesktop2->GetName(&s), L"GetDesktopName");
 
         if (s != NULL)
         {
@@ -141,7 +141,7 @@ std::wstring GetDesktopName(LogF* pLog, void* logdata, const CComPtr<IVirtualDes
             _snwprintf_s(buffer, _TRUNCATE, L"Desktop %d", GetDesktopNumber(pLog, logdata, pDesktop));
             ret = buffer;
         }
-    }
+    //}
 
     return ret;
 }
@@ -150,7 +150,7 @@ CComPtr<IVirtualDesktop> GetDesktop(LogF* pLog, void* logdata, int d)
 {
     const CComPtr<IVirtualDesktopManagerInternal>& pDesktopManagerInternal = GetDesktopManagerInternal(pLog, logdata);
     CComPtr<IObjectArray> pDesktopArray;
-    if (pDesktopManagerInternal && SUCCEEDED(pDesktopManagerInternal->GetDesktops(&pDesktopArray)))
+    if (pDesktopManagerInternal && SUCCEEDED(pDesktopManagerInternal->GetDesktops(nullptr, &pDesktopArray)))
     {
         CComPtr<IVirtualDesktop> pDesktop;
         LogHR(pLog, logdata, pDesktopArray->GetAt(d - 1, IID_PPV_ARGS(&pDesktop)), E_INVALIDARG, L"IObjectArray GetAt");
@@ -174,7 +174,7 @@ void CreateDesktop(LogF* pLog, void* logdata)
 {
     const CComPtr<IVirtualDesktopManagerInternal>& pDesktopManagerInternal = GetDesktopManagerInternal(pLog, logdata);
     CComPtr<IVirtualDesktop> pDesktop;
-    LogHR(pLog, logdata, pDesktopManagerInternal->CreateDesktop(&pDesktop), L"CreateDesktop");
+    LogHR(pLog, logdata, pDesktopManagerInternal->CreateDesktop(nullptr, &pDesktop), L"CreateDesktop");
     if (pDesktop)
         SwitchDesktop(pLog, logdata, pDesktop);
 }

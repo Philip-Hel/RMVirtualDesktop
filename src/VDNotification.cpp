@@ -64,8 +64,28 @@ STDMETHODIMP VirtualDesktopNotification::ViewVirtualDesktopChanged(IApplicationV
     return S_OK;
 }
 
-STDMETHODIMP VirtualDesktopNotification::CurrentVirtualDesktopChanged(IVirtualDesktop* pDesktopOld, IVirtualDesktop* pDesktopNew)
+STDMETHODIMP VirtualDesktopNotification::CurrentVirtualDesktopChanged(IObjectArray* monitors, IVirtualDesktop* pDesktopOld, IVirtualDesktop* pDesktopNew)
 {
     _notify->CurrentVirtualDesktopChanged(pDesktopOld, pDesktopNew);
+    return S_OK;
+}
+
+STDMETHODIMP VirtualDesktopNotification::VirtualDesktopMoved(IVirtualDesktop* pDesktop, UINT64 oldIndex, UINT64 newIndex)  
+{
+    return S_OK;
+}
+
+STDMETHODIMP VirtualDesktopNotification::VirtualDesktopIsPerMonitorChanged(BOOL isPerMonitor) 
+{
+    return S_OK;
+}
+
+STDMETHODIMP VirtualDesktopNotification::VirtualDesktopNameChanged(IVirtualDesktop* pDesktop, HSTRING name) 
+{
+    return S_OK;
+}
+
+STDMETHODIMP VirtualDesktopNotification::VirtualDesktopWallpaperChanged(IVirtualDesktop* pDesktop, HSTRING name) 
+{
     return S_OK;
 }

@@ -27,5 +27,9 @@ public:
     STDMETHODIMP VirtualDesktopDestroyFailed(IVirtualDesktop* pDesktopDestroyed, IVirtualDesktop* pDesktopFallback) override;
     STDMETHODIMP VirtualDesktopDestroyed(IVirtualDesktop* pDesktopDestroyed, IVirtualDesktop* pDesktopFallback) override;
     STDMETHODIMP ViewVirtualDesktopChanged(IApplicationView* pView) override;
-    STDMETHODIMP CurrentVirtualDesktopChanged(IVirtualDesktop* pDesktopOld, IVirtualDesktop* pDesktopNew) override;
+    STDMETHODIMP CurrentVirtualDesktopChanged(IObjectArray* monitors, IVirtualDesktop* pDesktopOld, IVirtualDesktop* pDesktopNew) override;
+    STDMETHODIMP VirtualDesktopMoved(IVirtualDesktop* pDesktop, UINT64 oldIndex, UINT64 newIndex) override;
+    STDMETHODIMP VirtualDesktopIsPerMonitorChanged(BOOL isPerMonitor) override;
+    STDMETHODIMP VirtualDesktopNameChanged(IVirtualDesktop* pDesktop, HSTRING name);
+    STDMETHODIMP VirtualDesktopWallpaperChanged(IVirtualDesktop* pDesktop, HSTRING name);
 };
